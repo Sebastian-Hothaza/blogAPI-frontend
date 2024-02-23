@@ -22,6 +22,7 @@ function Home() {
 	// 	});
 	// }		
 
+	// TEST
 
 	async function toggleDetails(post){
 		if (expandedPost && expandedPost._id == post._id){
