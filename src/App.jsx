@@ -7,9 +7,9 @@ function App() {
   const [error, setError] = useState(null);
   const [allBlogposts, setAllBlogposts] = useState('');
 
-  async function fetchAPIData(){
+  async function fetchAPIData_blogpost(){
 	try{
-	  const response = await fetch('https://hothaza-blogapi.fly.dev/posts');
+	  const response = await fetch('http://localhost:3000/posts');
 	  if (!response.ok) throw new Error("Failed to get API Data");
 	  const data = await response.json();
 	  setAllBlogposts(data);
@@ -19,7 +19,7 @@ function App() {
   }
 
   useEffect(() => {
-	fetchAPIData();
+	fetchAPIData_blogpost();
   }, [])
 
   return (error)?  <div>Error: Could not load data from API!🥹</div> : <Outlet context={allBlogposts}/>
