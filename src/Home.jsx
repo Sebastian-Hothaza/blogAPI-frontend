@@ -22,10 +22,6 @@ function Home() {
 	// 	});
 	// }		
 
-	async function fetchAPIData_comment(id){
-
-		return comments;
-	}
 
 	async function toggleDetails(post){
 		if (expandedPost && expandedPost._id == post._id){
