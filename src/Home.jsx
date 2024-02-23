@@ -1,38 +1,21 @@
 import { useOutletContext } from "react-router-dom"
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 function Home() {
 	const allBlogposts =  useOutletContext();
-	const [allCommentposts, setAllCommentposts] = useState([]); // Array to manage all comments
-	const temp = ['1','2']
 
-	const [expandedPost, setExpandedPost] = useState(); // Tracks which post we want to have as expanded
+	const [expandedPosts, setExpandedPosts] = useState([]); // Array that tracks which posts we want to have as expanded
+	const [allComments, setAllComments] = useState([]); // Array that tracks which posts we want to have as expanded
 
   	if (!allBlogposts) return <div>...API LOADING...</div>
-    	
-	// if (allBlogposts && allCommentposts.length == 0) fetchAPIData_comment();
-    	
-	// function fetchAPIData_comment(){
-	// 	// Go thru each blog post, get all comments for that post, then append those comments to allCommentPosts
-	// 	allBlogposts.forEach(async (post) => {
-	// 		const response = await fetch('http://localhost:3000/posts/'+post._id+'/comments');
-	// 		const allCommentsForPost = await response.json();
-	// 		console.log("All comments for post ",post._id,":",allCommentsForPost); // This appears to work correctly
-	// 		setAllCommentposts(allCommentposts => [...allCommentposts, allCommentsForPost]); //ISSUE? Need to merge arrays
-	// 	});
-	// }		
 
-	// TEST
+	async function toggleDetails(targetPost){
 
-	async function toggleDetails(post){
-		if (expandedPost && expandedPost._id == post._id){
-			// We want to hide the post
-			setExpandedPost('');
+		// Check if our targetPost is already in the array of expandedPosts
+		if ( expandedPosts.find(post => post._id===targetPost._id) ){
+			setExpandedPosts(expandedPosts.filter(post => post._id !== targetPost._id)); 
 		}else{
-			setExpandedPost(post);
-			const response = await fetch('http://localhost:3000/posts/'+post._id+'/comments');
-			const comments = await response.json();
-			console.log(comments);
+			setExpandedPosts(expandedPosts.concat(targetPost));
 		}
 	}
 
@@ -45,7 +28,7 @@ function Home() {
 					<div>{post.title}</div>
 					<button onClick={() => toggleDetails(post)}>Toggle Details</button>
 				</div>
-				{expandedPost && expandedPost._id==post._id && <div className="content">{post.content}</div>}
+				{expandedPosts.find((p) => p._id === post._id) && <div className="content">{post.content}</div>}
 			</div>
 		)
 		})}
