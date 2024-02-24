@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate   } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import Navbar from "./Navbar";
 import './App.css'
@@ -10,22 +10,28 @@ function App() {
 	const [error, setError] = useState(null);
 	const [allBlogposts, setAllBlogposts] = useState('');
 	const [loggedIn, setLoggedIn] = useState(false);
+	const navigate = useNavigate();
+
 	if (!loggedIn && localStorage.getItem("token")) setLoggedIn(true)
 
 	async function fetchAPIData_blogpost(){
-	try{
-		const response = await fetch('http://localhost:3000/posts');
-		if (!response.ok) throw new Error("Failed to get API Data");
-		const data = await response.json();
-		setAllBlogposts(data);
-	}catch(err){
-		setError(err.message)
-	}
+		try{
+			const response = await fetch('http://localhost:3000/posts');
+			if (!response.ok) throw new Error("Failed to get API Data");
+			const data = await response.json();
+			setAllBlogposts(data);
+		}catch(err){
+			setError(err.message)
+		}
 	}
 
 	useEffect(() => {
 		fetchAPIData_blogpost();
 	}, [])
+
+	useEffect(() => {
+		if (loggedIn) navigate("/"); // Only redirect on user login
+	}, [loggedIn])
 
 	function handleLogout(){
 		localStorage.clear();
@@ -33,9 +39,6 @@ function App() {
 	}	
 
 	async function handleLogin(formData){
-
-		// Make POST request using formData
-	
 		const response = await fetch('http://localhost:3000/login', {
 			method:'POST',
 			headers: {
@@ -45,18 +48,15 @@ function App() {
 		})
 		const data = await response.json();
 
-
 		if (!response.ok){
 			// Set some error message in state variable similar to how we did the comment post error message
 			console.log("BAD LOGIN")
+			formData.target.password.value = '';
 			return;
 		}
 
-		// Store JWT in a httpOnly cookie (TEMP IN LOCALSTORAGE)
-		localStorage.setItem("token", data.token);
-		// Store user in localStorage
-		localStorage.setItem("user", data.name);
-
+		localStorage.setItem("token", data.token); // Store JWT in a httpOnly cookie (TEMP IN LOCALSTORAGE)
+		localStorage.setItem("user", data.name); // Store user in localStorage
 		setLoggedIn(true);
 	}
 
