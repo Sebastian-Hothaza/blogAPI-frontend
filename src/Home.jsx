@@ -1,8 +1,8 @@
-import { json, useOutletContext } from "react-router-dom"
+import { useOutletContext } from "react-router-dom"
 import { useState } from 'react'
 
 function Home() {
-	const allBlogposts =  useOutletContext();
+	const allBlogposts =  useOutletContext().allBlogposts;
 
 	const [expandedPosts, setExpandedPosts] = useState([]); // Array that tracks which posts we want to have as expanded
 	const [allComments, setAllComments] = useState([]); // Array that tracks which posts we want to have as expanded
@@ -67,8 +67,6 @@ function Home() {
 	}
 
 	return (
-		<>
-		<h1>Welcome to my blog</h1>
 		<div className="blogpostCards">
 			{allBlogposts.map(post=>{
 				return (
@@ -103,7 +101,6 @@ function Home() {
 				)
 			})}
 		</div>
-		</>
 	)
 }
 
