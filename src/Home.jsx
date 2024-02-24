@@ -2,11 +2,12 @@ import { useOutletContext } from "react-router-dom"
 import { useState } from 'react'
 
 function Home() {
-	const allBlogposts =  useOutletContext().allBlogposts;
+	const { allBlogposts, setAllBlogposts } =  useOutletContext();
 
 	const [expandedPosts, setExpandedPosts] = useState([]); // Array that tracks which posts we want to have as expanded
 	const [allComments, setAllComments] = useState([]); // Array that tracks which posts we want to have as expanded
 	const [errorMessage, setErrorMessage] = useState(''); //Tracks error message generated when posting a comment
+	const [errorPostMessage, setErrorPostMessage] = useState(''); //Tracks error message generated when posting a post
 
 
   	if (!allBlogposts) return <div>...API LOADING...</div>
@@ -42,7 +43,7 @@ function Home() {
 		}
 	}
 
-	// Submits POST request using formData for a specified post.
+	// Submits POST request for comment using formData for a specified post.
 	async function handleCommentSubmit(formData, post){
 		formData.preventDefault(); // Stop page from refreshing
 	
@@ -66,7 +67,45 @@ function Home() {
 		setErrorMessage('');
 	}
 
+	// Submits POST request for post using formData
+	async function handlePostSubmit(formData){
+		formData.preventDefault(); // Stop page from refreshing
+	
+		const response = await fetch('http://localhost:3000/posts/', {
+			method: "POST",
+			headers: {
+				'Content-type': 'application/json; charset=UTF-8',
+				'Authorization': 'bearer '+localStorage.getItem('token')
+			},
+			body: JSON.stringify({title: formData.target.title.value, content: formData.target.content.value})
+		});
+		const data = await response.json();
+		if (!response.ok){
+			setErrorPostMessage({msg: 'POST FAILED: '+ Object.values(data)[0].msg}); //Prints message of first error object
+			return;
+		}
+		// Append freshly created post
+		setAllBlogposts(allBlogposts.concat({_id: data._id, title: formData.target.title.value,  content: formData.target.content.value}))
+		// Clear form fields and error
+		formData.target.title.value = '';
+		formData.target.content.value = '';
+		setErrorPostMessage('');
+	}
+
 	return (
+		<>
+		{localStorage.getItem("user")=="Sebastian" && 
+			<>
+			<form onSubmit={(formData) => handlePostSubmit(formData)}>
+				<label htmlFor="title">Post Title</label>
+				<input type="text" id="title" name="title"></input>
+				<label htmlFor="content">Post Content</label>
+				<input type="text" id="content" name="content"></input>
+				<button type="submit">SUBMIT</button>
+		 	</form>
+			{errorPostMessage && <div>{errorPostMessage.msg}</div>}
+			</>
+		}
 		<div className="blogpostCards">
 			{allBlogposts.map(post=>{
 				return (
@@ -101,6 +140,7 @@ function Home() {
 				)
 			})}
 		</div>
+		</>
 	)
 }
 
