@@ -35,7 +35,7 @@ function Home() {
 			setExpandedPosts(expandedPosts.filter(post => post._id !== targetPost._id)); 
 		}else{
 			setExpandedPosts(expandedPosts.concat(targetPost));
-			const response = await fetch('http://localhost:3000/posts/'+targetPost._id+'/comments');
+			const response = await fetch('https://hothaza-blogapi.fly.dev/posts/'+targetPost._id+'/comments');
 			const comments = await response.json();
 			
 			// Check if comments are loaded already for this post, if not load them in
@@ -60,7 +60,7 @@ function Home() {
 	async function handleCommentSubmit(formData, post){
 		formData.preventDefault(); // Stop page from refreshing
 	
-		const response = await fetch('http://localhost:3000/posts/'+post._id+'/comments', {
+		const response = await fetch('https://hothaza-blogapi.fly.dev/posts/'+post._id+'/comments', {
 			method: "POST",
 			headers: {
 				'Content-type': 'application/json; charset=UTF-8',
@@ -84,7 +84,7 @@ function Home() {
 	async function handlePostSubmit(formData){
 		formData.preventDefault(); // Stop page from refreshing
 	
-		const response = await fetch('http://localhost:3000/posts/', {
+		const response = await fetch('https://hothaza-blogapi.fly.dev/posts/', {
 			method: "POST",
 			headers: {
 				'Content-type': 'application/json; charset=UTF-8',
@@ -108,7 +108,7 @@ function Home() {
 	async function handlePostEdit(formData, post){
 		formData.preventDefault(); // Stop page from refreshing
 
-		const response = await fetch('http://localhost:3000/posts/'+post._id, {
+		const response = await fetch('https://hothaza-blogapi.fly.dev/posts/'+post._id, {
 			method: "PUT",
 			headers: {
 				'Content-type': 'application/json; charset=UTF-8',
@@ -140,7 +140,7 @@ function Home() {
 	async function handlePostDelete(e,post){
 		e.preventDefault(); // Stop page from refreshing
 
-		const response = await fetch('http://localhost:3000/posts/'+post._id, {
+		const response = await fetch('https://hothaza-blogapi.fly.dev/posts/'+post._id, {
 			method: "DELETE",
 			headers: {
 				'Content-type': 'application/json; charset=UTF-8',
@@ -162,7 +162,7 @@ function Home() {
 	async function handleCommentDelete(e,post,comment){
 		e.preventDefault(); // Stop page from refreshing
 
-		const response = await fetch('http://localhost:3000/posts/'+post._id+'/comments/'+comment._id, {
+		const response = await fetch('https://hothaza-blogapi.fly.dev/posts/'+post._id+'/comments/'+comment._id, {
 			method: "DELETE",
 			headers: {
 				'Content-type': 'application/json; charset=UTF-8',

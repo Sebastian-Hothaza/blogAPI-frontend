@@ -16,7 +16,7 @@ function App() {
 
 	async function fetchAPIData_blogpost(){
 		try{
-			const response = await fetch('http://localhost:3000/posts');
+			const response = await fetch('https://hothaza-blogapi.fly.dev/posts');
 			if (!response.ok) throw new Error("Failed to get API Data");
 			const data = await response.json();
 			setAllBlogposts(data);
@@ -39,7 +39,7 @@ function App() {
 	}	
 
 	async function handleLogin(formData){
-		const response = await fetch('http://localhost:3000/login', {
+		const response = await fetch('https://hothaza-blogapi.fly.dev/login', {
 			method:'POST',
 			headers: {
 				'Content-type': 'application/json; charset=UTF-8',
