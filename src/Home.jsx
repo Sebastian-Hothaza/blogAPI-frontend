@@ -8,6 +8,7 @@ function Home() {
 	const [allComments, setAllComments] = useState([]); // Array that tracks which posts we want to have as expanded
 	const [errorMessage, setErrorMessage] = useState(''); //Tracks error message generated when posting a comment
 	const [errorPostMessage, setErrorPostMessage] = useState(''); //Tracks error message generated when posting a post
+	const [expandPostEdit, setExpandPostEdit] = useState([]); //Tracks error message generated when posting a post
 
 
   	if (!allBlogposts) return <div>...API LOADING...</div>
@@ -39,6 +40,18 @@ function Home() {
 			
 			// Check if comments are loaded already for this post, if not load them in
 			if (!checkSubset(allComments, comments)) setAllComments(allComments.concat(comments));
+			
+		}
+	}
+
+	async function togglePostEdit(targetPost){
+
+		// Check if our targetPost is already in the array of expandPostEdit
+		if ( expandPostEdit.find(post => post._id===targetPost._id) ){
+			setExpandPostEdit(expandPostEdit.filter(post => post._id !== targetPost._id)); 
+		}else{
+			setExpandPostEdit(expandPostEdit.concat(targetPost));
+
 			
 		}
 	}
@@ -92,8 +105,45 @@ function Home() {
 		setErrorPostMessage('');
 	}
 
+	async function handlePostEdit(formData, post){
+		formData.preventDefault(); // Stop page from refreshing
+		console.log("Handle edit")
+		const response = await fetch('http://localhost:3000/posts/'+post._id, {
+			method: "PUT",
+			headers: {
+				'Content-type': 'application/json; charset=UTF-8',
+				'Authorization': 'bearer '+localStorage.getItem('token')
+			},
+			body: JSON.stringify({title: formData.target.title.value, content: formData.target.content.value})
+		});
+		const data = await response.json();
+		if (!response.ok){
+			console.log("BAD FORM DATA FOR POST EDIT")
+			return;
+		}
+
+		// Update array by replacing edited post with new post
+		setAllBlogposts(allBlogposts.map(p => {
+			if (p._id === post._id){
+				return {_id: p._id, title: formData.target.title.value,  content: formData.target.content.value}
+			}else{
+				return p;
+			}
+		}))
+
+		// Clear form fields
+		formData.target.title.value = '';
+		formData.target.content.value = '';
+
+	}
+
+	async function handlePostDelete(post){
+		formData.preventDefault();
+	}
+
 	return (
 		<>
+		{/* CREATE POST FORM VISIBLE FOR ADMIN ONLY */}
 		{localStorage.getItem("user")=="Sebastian" && 
 			<>
 			<form onSubmit={(formData) => handlePostSubmit(formData)}>
@@ -121,7 +171,18 @@ function Home() {
 								<div className="content">{post.content}</div>
 								{localStorage.getItem("user")=="Sebastian" && 
 									<>
-										<button>EDIT</button>
+										<button onClick={()=>togglePostEdit(post)}>EDIT</button>
+										{expandPostEdit.find((p) => p._id === post._id) && 
+											<>
+												<form onSubmit={(formData) => handlePostEdit(formData, post)}>
+													<label htmlFor="title">Post Title</label>
+													<input type="text" id="title" name="title" defaultValue={post.title}></input>
+													<label htmlFor="content">Post Content</label>
+													<input type="text" id="content" name="content" defaultValue={post.content}></input>
+													<button type="submit">SUBMIT</button>
+												</form>
+											</>
+										}
 										<button>DELETE</button>
 									</>
 								}
