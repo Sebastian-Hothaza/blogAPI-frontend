@@ -31,8 +31,32 @@ function App() {
 		setLoggedIn(false);
 	}	
 
-	function handleLogin(formData){
-		console.log("handle login");
+	async function handleLogin(formData){
+
+		// Make POST request using formData
+	
+		const response = await fetch('http://localhost:3000/login', {
+			method:'POST',
+			headers: {
+				'Content-type': 'application/json; charset=UTF-8',
+			},
+			body: JSON.stringify({name: formData.target.name.value, password: formData.target.password.value})
+		})
+		const data = await response.json();
+
+
+		if (!response.ok){
+			// Set some error message in state variable similar to how we did the comment post error message
+			console.log("BAD LOGIN")
+			return;
+		}
+		// Log in success! Token returned as data.token
+
+		
+
+		
+
+		// If succeeds, then add JWT token to localStorage
 		setLoggedIn(true);
 	}
 
