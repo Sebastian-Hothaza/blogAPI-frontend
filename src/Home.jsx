@@ -119,8 +119,19 @@ function Home() {
 						{expandedPosts.find((p) => p._id === post._id) && 
 							<>
 								<div className="content">{post.content}</div>
+								{localStorage.getItem("user")=="Sebastian" && 
+									<>
+										<button>EDIT</button>
+										<button>DELETE</button>
+									</>
+								}
 								{/* COMMENTS */}
-								{allComments.filter(comment => comment.parentPost === post._id).map(comment => <div key={comment._id}>{comment.name}: {comment.comment}</div>)}
+								{allComments.filter(comment => comment.parentPost === post._id).map(comment => 
+										<div className="postComment" key={comment._id}>
+											<div>{comment.name}: {comment.comment}</div>
+											{localStorage.getItem("user")=="Sebastian" && <button>DELETE</button>}
+										</div>
+								)}
 
 								{/* COMMENT FORM */}
 								<form onSubmit={(formData) => handleCommentSubmit(formData, post)}>
