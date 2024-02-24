@@ -1,8 +1,22 @@
+import { useOutletContext } from "react-router-dom";
+
 const Login = () => {
+
+  const {handleLogin, loggedIn} =  useOutletContext();
+
+  function handleLoginSubmit(formData){
+    formData.preventDefault();
+    handleLogin(formData);
+  }
+
   return (
-    <div>
-      <h1>Log in</h1>
-    </div>
+    <form onSubmit={(formData) => handleLoginSubmit(formData)}>
+      <label htmlFor="name">Name</label>
+      <input type="text" id="name" name="name"></input>
+      <label htmlFor="password">Password</label>
+      <input type="text" id="password" name="password"></input>
+      <button type="submit">LOG IN</button>
+   </form>
   );
 };
 
