@@ -107,7 +107,7 @@ function Home() {
 
 	async function handlePostEdit(formData, post){
 		formData.preventDefault(); // Stop page from refreshing
-		console.log("Handle edit")
+
 		const response = await fetch('http://localhost:3000/posts/'+post._id, {
 			method: "PUT",
 			headers: {
@@ -137,8 +137,47 @@ function Home() {
 
 	}
 
-	async function handlePostDelete(post){
-		formData.preventDefault();
+	async function handlePostDelete(e,post){
+		e.preventDefault(); // Stop page from refreshing
+
+		const response = await fetch('http://localhost:3000/posts/'+post._id, {
+			method: "DELETE",
+			headers: {
+				'Content-type': 'application/json; charset=UTF-8',
+				'Authorization': 'bearer '+localStorage.getItem('token')
+			}
+		});
+		
+		if (!response.ok){
+			const error = await response.json();
+			console.log("INVALID DELETE: ", error.msg)
+			return;
+		}
+
+		// Update array by deleteing the post
+		setAllBlogposts(allBlogposts.filter(p => p._id !== post._id))
+	}
+
+	
+	async function handleCommentDelete(e,post,comment){
+		e.preventDefault(); // Stop page from refreshing
+
+		const response = await fetch('http://localhost:3000/posts/'+post._id+'/comments/'+comment._id, {
+			method: "DELETE",
+			headers: {
+				'Content-type': 'application/json; charset=UTF-8',
+				'Authorization': 'bearer '+localStorage.getItem('token')
+			}
+		});
+		
+		if (!response.ok){
+			const error = await response.json();
+			console.log("INVALID DELETE: ", error.msg)
+			return;
+		}
+
+		// Update array by deleteing the post
+		setAllComments(allComments.filter(c => c._id !== comment._id))
 	}
 
 	return (
@@ -183,14 +222,14 @@ function Home() {
 												</form>
 											</>
 										}
-										<button>DELETE</button>
+										<button onClick={(e)=>handlePostDelete(e,post)}>DELETE</button>
 									</>
 								}
 								{/* COMMENTS */}
 								{allComments.filter(comment => comment.parentPost === post._id).map(comment => 
 										<div className="postComment" key={comment._id}>
 											<div>{comment.name}: {comment.comment}</div>
-											{localStorage.getItem("user")=="Sebastian" && <button>DELETE</button>}
+											{localStorage.getItem("user")=="Sebastian" && <button onClick={(e)=>handleCommentDelete(e,post,comment)}>DELETE</button>}
 										</div>
 								)}
 
