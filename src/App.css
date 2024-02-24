@@ -5,6 +5,13 @@
     gap: 50px;
 }
 
+.navBar{
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 25px;
+    align-items: center;
+}
+
 .blogpostCard{
     display: flex;
     flex-direction: column;
