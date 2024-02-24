@@ -28,7 +28,6 @@ function App() {
 	}, [])
 
 	function handleLogout(){
-		console.log("handle logout");
 		localStorage.clear();
 		setLoggedIn(false);
 	}	
@@ -52,9 +51,6 @@ function App() {
 			console.log("BAD LOGIN")
 			return;
 		}
-		// Log in success! Token returned as data.token
-		console.log("token: ", data.token)
-		console.log("name of person who logged in: ", data.name)
 
 		// Store JWT in a httpOnly cookie (TEMP IN LOCALSTORAGE)
 		localStorage.setItem("token", data.token);
@@ -69,7 +65,7 @@ function App() {
   return (
 	<>
 		<Navbar handleLogout={handleLogout} loggedIn={loggedIn}/>
-  		<Outlet context={{allBlogposts, loggedIn, handleLogin, handleLogout}}/> 
+  		<Outlet context={{allBlogposts, setAllBlogposts, loggedIn, handleLogin, handleLogout}}/> 
 		
 	</>
   )
