@@ -10,6 +10,7 @@ function App() {
 	const [error, setError] = useState(null);
 	const [allBlogposts, setAllBlogposts] = useState('');
 	const [loggedIn, setLoggedIn] = useState(false);
+	if (!loggedIn && localStorage.getItem("token")) setLoggedIn(true)
 
 	async function fetchAPIData_blogpost(){
 	try{
@@ -28,6 +29,7 @@ function App() {
 
 	function handleLogout(){
 		console.log("handle logout");
+		localStorage.clear();
 		setLoggedIn(false);
 	}	
 
@@ -51,12 +53,14 @@ function App() {
 			return;
 		}
 		// Log in success! Token returned as data.token
+		console.log("token: ", data.token)
+		console.log("name of person who logged in: ", data.name)
 
-		
+		// Store JWT in a httpOnly cookie (TEMP IN LOCALSTORAGE)
+		localStorage.setItem("token", data.token);
+		// Store user in localStorage
+		localStorage.setItem("user", data.name);
 
-		
-
-		// If succeeds, then add JWT token to localStorage
 		setLoggedIn(true);
 	}
 
