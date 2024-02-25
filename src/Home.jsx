@@ -62,6 +62,7 @@ function Home() {
 	
 		const response = await fetch('https://hothaza-blogapi.fly.dev/posts/'+post._id+'/comments', {
 			method: "POST",
+			credentials: "include",
 			headers: {
 				'Content-type': 'application/json; charset=UTF-8',
 			},
@@ -86,6 +87,7 @@ function Home() {
 	
 		const response = await fetch('https://hothaza-blogapi.fly.dev/posts/', {
 			method: "POST",
+			credentials: "include",
 			headers: {
 				'Content-type': 'application/json; charset=UTF-8',
 			},
@@ -109,6 +111,7 @@ function Home() {
 
 		const response = await fetch('https://hothaza-blogapi.fly.dev/posts/'+post._id, {
 			method: "PUT",
+			credentials: "include",
 			headers: {
 				'Content-type': 'application/json; charset=UTF-8',
 			},
@@ -140,6 +143,7 @@ function Home() {
 
 		const response = await fetch('https://hothaza-blogapi.fly.dev/posts/'+post._id, {
 			method: "DELETE",
+			credentials: "include",
 			headers: {
 				'Content-type': 'application/json; charset=UTF-8',
 			}
@@ -161,6 +165,7 @@ function Home() {
 
 		const response = await fetch('https://hothaza-blogapi.fly.dev/posts/'+post._id+'/comments/'+comment._id, {
 			method: "DELETE",
+			credentials: "include",
 			headers: {
 				'Content-type': 'application/json; charset=UTF-8',
 			}
