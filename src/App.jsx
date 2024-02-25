@@ -35,13 +35,14 @@ function App() {
 
 	function handleLogout(){
 		localStorage.clear();
+		//TODO: Wipe out the cookie
 		setLoggedIn(false);
 	}	
 
 	async function handleLogin(formData){
 		const response = await fetch('https://hothaza-blogapi.fly.dev/login', {
 			method:'POST',
-			credentials: "include",
+			//credentials: "include",
 			headers: {
 				'Content-type': 'application/json; charset=UTF-8',
 			},
