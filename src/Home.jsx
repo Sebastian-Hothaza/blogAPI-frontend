@@ -88,7 +88,6 @@ function Home() {
 			method: "POST",
 			headers: {
 				'Content-type': 'application/json; charset=UTF-8',
-				'Authorization': 'bearer '+localStorage.getItem('token')
 			},
 			body: JSON.stringify({title: formData.target.title.value, content: formData.target.content.value})
 		});
@@ -112,7 +111,6 @@ function Home() {
 			method: "PUT",
 			headers: {
 				'Content-type': 'application/json; charset=UTF-8',
-				'Authorization': 'bearer '+localStorage.getItem('token')
 			},
 			body: JSON.stringify({title: formData.target.title.value, content: formData.target.content.value})
 		});
@@ -144,7 +142,6 @@ function Home() {
 			method: "DELETE",
 			headers: {
 				'Content-type': 'application/json; charset=UTF-8',
-				'Authorization': 'bearer '+localStorage.getItem('token')
 			}
 		});
 		
@@ -166,7 +163,6 @@ function Home() {
 			method: "DELETE",
 			headers: {
 				'Content-type': 'application/json; charset=UTF-8',
-				'Authorization': 'bearer '+localStorage.getItem('token')
 			}
 		});
 		

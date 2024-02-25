@@ -12,7 +12,7 @@ function App() {
 	const [loggedIn, setLoggedIn] = useState(false);
 	const navigate = useNavigate();
 
-	if (!loggedIn && localStorage.getItem("token")) setLoggedIn(true)
+	if (!loggedIn && localStorage.getItem("user")) setLoggedIn(true)
 
 	async function fetchAPIData_blogpost(){
 		try{
@@ -55,7 +55,6 @@ function App() {
 			return;
 		}
 
-		localStorage.setItem("token", data.token); // Store JWT in a httpOnly cookie (TEMP IN LOCALSTORAGE)
 		localStorage.setItem("user", data.name); // Store user in localStorage
 		setLoggedIn(true);
 	}
